@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,180 +8,185 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/main.css">
 </head>
+
 <body>
-<div class="wrapper">
+    <div class="wrapper">
 
-    <aside>
-        <header>
-            <h1 class="logo">Aura Artesanal</h1>
-        </header>
+        <aside>
+            <header>
+                <h1 class="logo">Aura Artesanal</h1>
+            </header>
 
-        <nav>
-            <ul class="menu">
-                <li>
-                    <button id="todos" class="boton-menu boton-categoria active">
-                        <i class="bi bi-hand-index-thumb-fill"></i>Todos los productos
-                    </button>
-                </li>
-                <li>
-                    <button id="LAMPARA" class="boton-menu boton-categoria">
-                        <i class="bi bi-hand-index-thumb"></i>Lámparas
-                    </button>
-                </li>
-                <li>
-                    <button id="MACETA" class="boton-menu boton-categoria">
-                        <i class="bi bi-hand-index-thumb"></i>Macetas
-                    </button>
-                </li>
-                <li>
-                    <button id="RELOJ" class="boton-menu boton-categoria">
-                        <i class="bi bi-hand-index-thumb"></i>Relojes
-                    </button>
-                </li>
-                <li>
-                    <a class="boton-carrito" href="/carrito">
-                        <i class="bi bi-cart-fill"></i>
-                        Carrito <span id="numerito" class="numerito">0</span>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="todos" class="boton-menu boton-categoria active">
+                            <i class="bi bi-hand-index-thumb-fill"></i>Todos los productos
+                        </button>
+                    </li>
+                    <li>
+                        <button id="LAMPARA" class="boton-menu boton-categoria">
+                            <i class="bi bi-hand-index-thumb"></i>Lámparas
+                        </button>
+                    </li>
+                    <li>
+                        <button id="MACETA" class="boton-menu boton-categoria">
+                            <i class="bi bi-hand-index-thumb"></i>Macetas
+                        </button>
+                    </li>
+                    <li>
+                        <button id="RELOJ" class="boton-menu boton-categoria">
+                            <i class="bi bi-hand-index-thumb"></i>Relojes
+                        </button>
+                    </li>
+                    <li>
+                        <a class="boton-carrito" href="/carrito">
+                            <i class="bi bi-cart-fill"></i>
+                            Carrito <span id="numerito" class="numerito">0</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="opciones-usuario">
+                    <a class="boton-menu" href="/perfil">
+                        <i class="bi bi-person-circle"></i> Mi Perfil
                     </a>
-                </li>
-            </ul>
-            
-            <div class="opciones-usuario">
-                <div sec:authorize="hasRole('ADMIN')">
-                    <a class="boton-menu boton-agregar" href="/productos/nuevo">
-                        <i class="bi bi-plus-circle"></i> Nuevo producto
-                    </a>
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a class="boton-menu boton-agregar" href="/productos/nuevo">
+                            <i class="bi bi-plus-circle"></i> Nuevo producto
+                        </a>
+                    </div>
+                    <form action="/logout" method="post" style="display: inline;">
+                        <button type="submit" class="boton-menu">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                        </button>
+                    </form>
                 </div>
-                <form action="/logout" method="post" style="display: inline;">
-                    <button type="submit" class="boton-menu">
-                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                    </button>
-                </form>
+
+
+            </nav>
+
+            <footer>
+                <p class="texto-footer">2025 Lámparas Coder</p>
+            </footer>
+        </aside>
+
+        <main>
+            <div class="filtro-busqueda">
+                <input type="text" id="busquedaNombre" placeholder="Buscar producto...">
+                <select id="busquedaCategoria">
+                    <option value="todos">Todas las categorías</option>
+                    <option value="LAMPARA">Lámparas</option>
+                    <option value="MACETA">Macetas</option>
+                    <option value="RELOJ">Relojes</option>
+                </select>
+
+                <select id="ordenarProductos">
+                    <option value="ninguno">Ordenar por...</option>
+                    <option value="precioAsc">Precio: menor a mayor</option>
+                    <option value="precioDesc">Precio: mayor a menor</option>
+                    <option value="nombreAsc">Nombre: A - Z</option>
+                    <option value="nombreDesc">Nombre: Z - A</option>
+                </select>
+
+                <input type="number" id="precioMin" placeholder="Precio mín" min="0">
+                <input type="number" id="precioMax" placeholder="Precio máx" min="0">
+                <button id="btnFiltrar">Filtrar</button>
+                <button id="btnLimpiar">Limpiar</button>
             </div>
 
 
-        </nav>
-            
-        <footer>
-            <p class="texto-footer">2025 Lámparas Coder</p>
-        </footer>
-    </aside>
+            <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
 
-    <main>
-        <div class="filtro-busqueda">
-            <input type="text" id="busquedaNombre" placeholder="Buscar producto...">
-            <select id="busquedaCategoria">
-                <option value="todos">Todas las categorías</option>
-                <option value="LAMPARA">Lámparas</option>
-                <option value="MACETA">Macetas</option>
-                <option value="RELOJ">Relojes</option>
-            </select>
 
-            <select id="ordenarProductos">
-                <option value="ninguno">Ordenar por...</option>
-                <option value="precioAsc">Precio: menor a mayor</option>
-                <option value="precioDesc">Precio: mayor a menor</option>
-                <option value="nombreAsc">Nombre: A - Z</option>
-                <option value="nombreDesc">Nombre: Z - A</option>
-            </select>
+            <div id="contenedor-productos" class="contenedor-productos">
 
-            <input type="number" id="precioMin" placeholder="Precio mín" min="0">
-            <input type="number" id="precioMax" placeholder="Precio máx" min="0">
-            <button id="btnFiltrar">Filtrar</button>
-            <button id="btnLimpiar">Limpiar</button>
+            </div>
+        </main>
+    </div>
+
+
+    <div class="overlay-info-ventana">
+        <div class="info-ventana">CONTENEDOR DE INFORMACIÓN</div>
+    </div>
+
+
+    <script src="/main.js"></script>
+
+    <!-- Chat flotante -->
+    <div id="chatWidget" class="chat-widget">
+        <div class="chat-header" onclick="toggleChat()">
+            Chat Aura Artesanal <span class="cerrar">&#10005;</span>
         </div>
-
-        
-        <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
-
-        
-        <div id="contenedor-productos" class="contenedor-productos">
-           
+        <div id="chatMessages" class="chat-messages">
+            <div class="message bot">¡Hola! Bienvenido a Aura Artesanal. Soy tu asistente virtual. Pregunta por
+                lámparas, macetas o relojes.</div>
         </div>
-    </main>
-</div>
-
-
-<div class="overlay-info-ventana">
-    <div class="info-ventana">CONTENEDOR DE INFORMACIÓN</div>
-</div>
-
-
-<script src="/main.js"></script>
-
-<!-- Chat flotante -->
-<div id="chatWidget" class="chat-widget">
-    <div class="chat-header" onclick="toggleChat()">
-        Chat Aura Artesanal <span class="cerrar">&#10005;</span>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+            <button onclick="sendChatMessage()">Enviar</button>
+        </div>
     </div>
-    <div id="chatMessages" class="chat-messages">
-        <div class="message bot">¡Hola! Bienvenido a Aura Artesanal. Soy tu asistente virtual. Pregunta por lámparas, macetas o relojes.</div>
-    </div>
-    <div class="chat-input-area">
-        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
-        <button onclick="sendChatMessage()">Enviar</button>
-    </div>
-</div>
 
-<button id="openChatBtn" class="open-chat-btn" onclick="toggleChat()">
-    <i class="bi bi-robot"></i>
-</button>
+    <button id="openChatBtn" class="open-chat-btn" onclick="toggleChat()">
+        <i class="bi bi-robot"></i>
+    </button>
 
 
-<script>
-function toggleChat() {
-    const widget = document.getElementById('chatWidget');
-    const btn = document.getElementById('openChatBtn');
-    if (widget.style.display === 'none') {
-        widget.style.display = 'flex';
-        btn.style.display = 'none';
-    } else {
-        widget.style.display = 'none';
-        btn.style.display = 'block';
-    }
-}
+    <script>
+        function toggleChat() {
+            const widget = document.getElementById('chatWidget');
+            const btn = document.getElementById('openChatBtn');
+            if (widget.style.display === 'none') {
+                widget.style.display = 'flex';
+                btn.style.display = 'none';
+            } else {
+                widget.style.display = 'none';
+                btn.style.display = 'block';
+            }
+        }
 
-const chatInput = document.getElementById('chatInput');
-chatInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        sendChatMessage();
-    }
-});
-
-async function sendChatMessage() {
-    const input = document.getElementById('chatInput');
-    const messages = document.getElementById('chatMessages');
-    const text = input.value.trim();
-    if (!text) return;
-
-    
-    const userDiv = document.createElement('div');
-    userDiv.classList.add('message', 'user');
-    userDiv.innerText = text;
-    messages.appendChild(userDiv);
-    input.value = '';
-    messages.scrollTop = messages.scrollHeight;
-
-    try {
-        const resp = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ mensaje: text })
+        const chatInput = document.getElementById('chatInput');
+        chatInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendChatMessage();
+            }
         });
-        const data = await resp.json();
 
-        const botDiv = document.createElement('div');
-        botDiv.classList.add('message', 'bot');
-        botDiv.innerHTML = data.respuesta.replace(/\n/g,'<br>');
-        messages.appendChild(botDiv);
-        messages.scrollTop = messages.scrollHeight;
-    } catch(err) {
-        console.error(err);
-    }
-}
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const text = input.value.trim();
+            if (!text) return;
 
-</script>
+
+            const userDiv = document.createElement('div');
+            userDiv.classList.add('message', 'user');
+            userDiv.innerText = text;
+            messages.appendChild(userDiv);
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            try {
+                const resp = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensaje: text })
+                });
+                const data = await resp.json();
+
+                const botDiv = document.createElement('div');
+                botDiv.classList.add('message', 'bot');
+                botDiv.innerHTML = data.respuesta.replace(/\n/g, '<br>');
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+    </script>
 
 
 
@@ -205,7 +211,9 @@ async function sendChatMessage() {
 
         <hr>
 
-        <h4 th:text="${usuario != null && usuario.username != null ? 'Hola ' + usuario.username + ', deja tu reseña' : 'Deja tu reseña'}"></h4>
+        <h4
+            th:text="${usuario != null && usuario.username != null ? 'Hola ' + usuario.username + ', deja tu reseña' : 'Deja tu reseña'}">
+        </h4>
         <form id="formReseña" class="form-reseña">
             <input type="hidden" id="reseña-nombre" th:value="${usuario != null ? usuario.username : ''}">
             <textarea id="reseña-comentario" placeholder="Escribe tu reseña..." required rows="3" cols="80"></textarea>
@@ -228,4 +236,5 @@ async function sendChatMessage() {
         </form>
     </div>
 </div>
+
 </html>

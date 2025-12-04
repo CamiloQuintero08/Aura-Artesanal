@@ -963,3 +963,10 @@ main {
 
 }
 
+
+#text-register{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--primary-color-dark);
+}

@@ -19,8 +19,6 @@ const botonesCategoterias = document.querySelectorAll('.boton-categoria');
 let botonesAgregar = document.querySelectorAll(".agregar-carrito");
 let numerito = document.querySelector("#numerito");
 
-let productosEnCarrito = JSON.parse(localStorage.getItem("productos-en-carrito")) || [];
-
 // ===============================
 // CARGAR PRODUCTOS DESDE EL BACKEND
 // ===============================
@@ -86,27 +84,54 @@ function actualizarBotonesAgregar() {
     });
 }
 
-function agregarAlCarrito(e) {
-    const idProducto = e.currentTarget.dataset.id;
-    const productoAgregado = productos.find(prod => prod.id == idProducto);
+async function agregarAlCarrito(e) {
+    const idProducto = parseInt(e.currentTarget.dataset.id);
+    const boton = e.currentTarget; // Guardar referencia antes de cualquier await
 
-    if (!productoAgregado) return;
+    try {
+        const respuesta = await fetch("/api/carrito/agregar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                productoId: idProducto,
+                cantidad: 1
+            })
+        });
 
-    const productoEnCarrito = productosEnCarrito.find(p => p.id == idProducto);
+        if (!respuesta.ok) {
+            throw new Error("Error al agregar producto al carrito");
+        }
 
-    if (productoEnCarrito) {
-        productoEnCarrito.cantidad++;
-    } else {
-        productosEnCarrito.push({ ...productoAgregado, cantidad: 1 });
+        // Actualizar el numerito después de agregar
+        await actualizarNumerito();
+
+        // Mostrar feedback visual (boton ya está guardado arriba)
+        const textoOriginal = boton.innerHTML;
+        boton.innerHTML = '<i class="bi bi-check-circle"></i>';
+        boton.disabled = true;
+
+        setTimeout(() => {
+            boton.innerHTML = textoOriginal;
+            boton.disabled = false;
+        }, 1000);
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error al agregar el producto al carrito");
     }
-
-    actualizarNumerito();
-    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
 }
 
-function actualizarNumerito() {
-    const nuevoNumerito = productosEnCarrito.reduce((acc, prod) => acc + prod.cantidad, 0);
-    numerito.innerText = nuevoNumerito;
+async function actualizarNumerito() {
+    try {
+        const respuesta = await fetch("/api/carrito/cantidad");
+        if (!respuesta.ok) throw new Error("Error al obtener cantidad");
+
+        const data = await respuesta.json();
+        numerito.innerText = data.cantidad;
+    } catch (error) {
+        console.error("Error al actualizar numerito:", error);
+        numerito.innerText = "0";
+    }
 }
 
 // ===============================
@@ -153,18 +178,18 @@ function ordenarProductos() {
 botonesCategoterias.forEach(boton => {
     boton.addEventListener('click', (e) => {
         botonesCategoterias.forEach(boton => boton.classList.remove('active'));
-         e.currentTarget.classList.add('active');
+        e.currentTarget.classList.add('active');
 
-            if (e.currentTarget.id !== "todos") {
-                const productoCategoria = productos.find(producto => producto.categoria === e.currentTarget.id);
-                tituloPrincipal.innerText = productoCategoria.categoria;
+        if (e.currentTarget.id !== "todos") {
+            const productoCategoria = productos.find(producto => producto.categoria === e.currentTarget.id);
+            tituloPrincipal.innerText = productoCategoria.categoria;
 
-                const productosBoton = productos.filter(producto => producto.categoria === e.currentTarget.id);
-                mostrarProductos(productosBoton);
-            } else {
-                tituloPrincipal.innerText = "Todos los productos";
-                cargarProductos(productos);
-            }
+            const productosBoton = productos.filter(producto => producto.categoria === e.currentTarget.id);
+            mostrarProductos(productosBoton);
+        } else {
+            tituloPrincipal.innerText = "Todos los productos";
+            cargarProductos(productos);
+        }
     })
 })
 
