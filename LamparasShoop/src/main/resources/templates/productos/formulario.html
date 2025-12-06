@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,7 @@
         }
 
         body.product-body {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(#556B2F, #E1D8C5, #362417, #556B2F);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -43,8 +44,15 @@
         }
 
         @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(-15px);}
-            to {opacity: 1; transform: translateY(0);}
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .product-container h2 {
@@ -149,55 +157,56 @@
         }
     </style>
 </head>
+
 <body class="product-body">
 
-<div class="product-container">
-    <h2 th:text="${producto.id == null ? 'Agregar Producto' : 'Editar Producto'}"></h2>
+    <div class="product-container">
+        <h2 th:text="${producto.id == null ? 'Agregar Producto' : 'Editar Producto'}"></h2>
 
-    <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
-        <input type="hidden" th:field="*{id}">
+        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
 
-        <label>Nombre:</label>
-        <input type="text" th:field="*{nombre}" placeholder="Ingrese Nombre del Producto" required>
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" placeholder="Ingrese Nombre del Producto" required>
 
-        <label>Categoria:</label>
-        <select name="categoria" id="categoria-select">
-            <option value="">--Selecciona una categoría--</option>
-            <option value="LAMPARA">Lampara</option>
-            <option value="MACETA">Maceta</option>
-            <option value="RELOJ">Reloj</option>
-        </select>
+            <label>Categoria:</label>
+            <select name="categoria" id="categoria-select">
+                <option value="">--Selecciona una categoría--</option>
+                <option value="LAMPARA">Lampara</option>
+                <option value="MACETA">Maceta</option>
+                <option value="RELOJ">Reloj</option>
+            </select>
 
-        <label>Precio:</label>
-        <input type="number" th:field="*{precio}" placeholder="Ingrese Precio" required>
+            <label>Precio:</label>
+            <input type="number" th:field="*{precio}" placeholder="Ingrese Precio" required>
 
-        <label>Stock:</label>
-        <input type="number" th:field="*{stock}" placeholder="Ingrese Stock" required>
+            <label>Stock:</label>
+            <input type="number" th:field="*{stock}" placeholder="Ingrese Stock" required>
 
-        <label>Imagen:</label>
-        <input type="file" name="imagenFile" accept="image/*">
+            <label>Imagen:</label>
+            <input type="file" name="imagenFile" accept="image/*">
 
-        <div th:if="${producto.imagen != null}">
-            <p>Imagen actual:</p>
-            <img th:src="@{${producto.imagen}}" alt="imagen producto">
-        </div>
+            <div th:if="${producto.imagen != null}">
+                <p>Imagen actual:</p>
+                <img th:src="@{${producto.imagen}}" alt="imagen producto">
+            </div>
 
-        <div class="text-center mt-4">
-            <button type="submit">Guardar</button>
-            <a href="/productos" class="btn-secondary">Cancelar</a>
-        </div>
+            <div class="text-center mt-4">
+                <button type="submit">Guardar</button>
+                <a href="/productos" class="btn-secondary">Cancelar</a>
+            </div>
 
-        <div class="acciones-formulario">
-            <a href="/productos/catalogo" class="btn-volver">
-                <i class="bi bi-arrow-left"></i> Volver al catálogo
-            </a>
-            <a href="/productos" class="btn-volver">
-                <i class="bi bi-arrow-left"></i> Ver productos
-            </a>
-        </div>
-    </form>
-</div>
+            <div class="acciones-formulario">
+                <a href="/productos/catalogo" class="btn-volver">
+                    <i class="bi bi-arrow-left"></i> Volver al catálogo
+                </a>
+                <a href="/productos" class="btn-volver">
+                    <i class="bi bi-arrow-left"></i> Ver productos
+                </a>
+            </div>
+        </form>
+    </div>
 
 </body>
-</html>
 
+</html>

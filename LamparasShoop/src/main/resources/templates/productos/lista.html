@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,7 @@
         }
 
         body.products-body {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(#556B2F, #E1D8C5, #362417, #556B2F);
             min-height: 100vh;
             padding: 2rem 0;
         }
@@ -34,14 +35,21 @@
             margin: 0 auto;
             padding: 2rem;
             border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             max-width: 1200px;
             animation: fadeIn 0.8s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(-15px);}
-            to {opacity: 1; transform: translateY(0);}
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .products-container h2 {
@@ -106,59 +114,61 @@
                 gap: 0.5rem;
             }
 
-            .btn-nuevo, .btn-volver {
+            .btn-nuevo,
+            .btn-volver {
                 width: 100%;
                 text-align: center;
             }
         }
     </style>
 </head>
+
 <body class="products-body">
 
-<div class="products-container">
-    <h2>Lista de Productos</h2>
+    <div class="products-container">
+        <h2>Lista de Productos</h2>
 
-    <!-- Contenedor de botones correctamente alineado -->
-    <div class="buttons-top">
-        <a href="/productos/catalogo" class="btn-volver">← Volver al catalogo</a>
-        <a href="/productos/nuevo" class="btn-nuevo">➕ Nuevo Producto</a>
+        <!-- Contenedor de botones correctamente alineado -->
+        <div class="buttons-top">
+            <a href="/productos/catalogo" class="btn-volver">← Volver al catalogo</a>
+            <a href="/productos/nuevo" class="btn-nuevo">➕ Nuevo Producto</a>
+        </div>
+
+        <!-- Tabla de productos -->
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Imagen</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${productos}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.nombre}"></td>
+                    <td th:text="${p.categoria}"></td>
+                    <td th:text="${p.precio}"></td>
+                    <td th:text="${p.stock}"></td>
+                    <td>
+                        <img th:if="${p.imagen != null}" th:src="'data:image/png;base64,'+${p.imagen}" alt="img"
+                            width="80" height="80">
+                        <span th:if="${p.imagen == null}">Sin imagen</span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/productos/editar/' + ${p.id}}" class="btn btn-primary btn-sm">Editar</a>
+                        <a th:href="@{'/productos/eliminar/' + ${p.id}}" class="btn btn-danger btn-sm"
+                            onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <!-- Tabla de productos -->
-    <table class="table table-striped table-hover shadow-sm">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Categoria</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Imagen</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${productos}">
-            <td th:text="${p.id}"></td>
-            <td th:text="${p.nombre}"></td>
-            <td th:text="${p.categoria}"></td>
-            <td th:text="${p.precio}"></td>
-            <td th:text="${p.stock}"></td>
-            <td>
-                <img th:if="${p.imagen != null}" th:src="'data:image/png;base64,'+${p.imagen}" alt="img" width="80" height="80">
-                <span th:if="${p.imagen == null}">Sin imagen</span>
-            </td>
-            <td>
-                <a th:href="@{'/productos/editar/' + ${p.id}}" class="btn btn-primary btn-sm">Editar</a>
-                <a th:href="@{'/productos/eliminar/' + ${p.id}}" class="btn btn-danger btn-sm"
-                   onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
 </body>
+
 </html>
-
-
